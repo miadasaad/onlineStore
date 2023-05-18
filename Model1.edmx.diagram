@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ee258c2479224153a1b5674a6a9a6273" Name="Diagram1">
+        <EntityTypeShape EntityType="SuperMarketModel.Client" Width="1.5" PointX="1.5" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperMarketModel.Product" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperMarketModel.Store" Width="1.5" PointX="0.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperMarketModel.StoreSupplierPrdPermission" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperMarketModel.StoreUnit" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperMarketModel.Supplier" Width="1.5" PointX="0.75" PointY="14" IsExpanded="true" />
+        <AssociationConnector Association="SuperMarketModel.FK_StoreSupplierPrdPermission_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="SuperMarketModel.FK_StoreUnit_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="SuperMarketModel.FK_StoreSupplierPrdPermission_Store" ManuallyRouted="false" />
+        <AssociationConnector Association="SuperMarketModel.FK_StoreSupplierPrdPermission_Supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="SuperMarketModel.StoreClient" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,550 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SuperMarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mail" Type="nvarchar" MaxLength="50" />
+          <Property Name="website" Type="nvarchar" MaxLength="50" />
+          <Property Name="creditCard" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Name="code" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StoreId" Type="int" Nullable="false" />
+          <Property Name="productionDate" Type="datetime" />
+          <Property Name="prdDuration" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Store_id" />
+          </Key>
+          <Property Name="Store_id" Type="int" Nullable="false" />
+          <Property Name="Store_Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="storeMng" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StoreClient">
+          <Key>
+            <PropertyRef Name="StoreId" />
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="StoreId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StoreSupplierPrdPermission">
+          <Key>
+            <PropertyRef Name="StoreId" />
+            <PropertyRef Name="SupplierId" />
+            <PropertyRef Name="PreoductId" />
+          </Key>
+          <Property Name="StoreId" Type="int" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+          <Property Name="PreoductId" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="permisionNumImport" Type="int" Nullable="false" />
+          <Property Name="permissionDate" Type="datetime" />
+          <Property Name="permissionNumExport" Type="int" />
+        </EntityType>
+        <EntityType Name="StoreUnit">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="measureUnit" />
+          </Key>
+          <Property Name="ProductId" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="measureUnit" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="fax" Type="nvarchar" MaxLength="50" />
+          <Property Name="mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="mail" Type="nvarchar" MaxLength="50" />
+          <Property Name="website" Type="nvarchar" MaxLength="50" />
+          <Property Name="numOfProd" Type="int" />
+        </EntityType>
+        <Association Name="FK_StoreClient_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="StoreClient" Type="Self.StoreClient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreClient">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreClient_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="StoreClient" Type="Self.StoreClient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Store_id" />
+            </Principal>
+            <Dependent Role="StoreClient">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreSupplierPrdPermission_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="PreoductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreSupplierPrdPermission_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Store_id" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreSupplierPrdPermission_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreUnit_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="StoreUnit" Type="Self.StoreUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="StoreUnit">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SuperMarketModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StoreClient" EntityType="Self.StoreClient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StoreSupplierPrdPermission" EntityType="Self.StoreSupplierPrdPermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StoreUnit" EntityType="Self.StoreUnit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_StoreClient_Client" Association="Self.FK_StoreClient_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="StoreClient" EntitySet="StoreClient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreClient_Store" Association="Self.FK_StoreClient_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="StoreClient" EntitySet="StoreClient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Product" Association="Self.FK_StoreSupplierPrdPermission_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Store" Association="Self.FK_StoreSupplierPrdPermission_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Supplier" Association="Self.FK_StoreSupplierPrdPermission_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreUnit_Product" Association="Self.FK_StoreUnit_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="StoreUnit" EntitySet="StoreUnit" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SuperMarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="creditCard" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Stores" Relationship="Self.StoreClient" FromRole="Client" ToRole="Store" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="code" />
+          </Key>
+          <Property Name="code" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StoreId" Type="Int32" Nullable="false" />
+          <Property Name="productionDate" Type="DateTime" Precision="3" />
+          <Property Name="prdDuration" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="StoreSupplierPrdPermissions" Relationship="Self.FK_StoreSupplierPrdPermission_Product" FromRole="Product" ToRole="StoreSupplierPrdPermission" />
+          <NavigationProperty Name="StoreUnits" Relationship="Self.FK_StoreUnit_Product" FromRole="Product" ToRole="StoreUnit" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Store_id" />
+          </Key>
+          <Property Name="Store_id" Type="Int32" Nullable="false" />
+          <Property Name="Store_Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="storeMng" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="StoreSupplierPrdPermissions" Relationship="Self.FK_StoreSupplierPrdPermission_Store" FromRole="Store" ToRole="StoreSupplierPrdPermission" />
+          <NavigationProperty Name="Clients" Relationship="Self.StoreClient" FromRole="Store" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="StoreSupplierPrdPermission">
+          <Key>
+            <PropertyRef Name="StoreId" />
+            <PropertyRef Name="SupplierId" />
+            <PropertyRef Name="PreoductId" />
+          </Key>
+          <Property Name="StoreId" Type="Int32" Nullable="false" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <Property Name="PreoductId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="permisionNumImport" Type="Int32" Nullable="false" />
+          <Property Name="permissionDate" Type="DateTime" Precision="3" />
+          <Property Name="permissionNumExport" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_StoreSupplierPrdPermission_Product" FromRole="StoreSupplierPrdPermission" ToRole="Product" />
+          <NavigationProperty Name="Store" Relationship="Self.FK_StoreSupplierPrdPermission_Store" FromRole="StoreSupplierPrdPermission" ToRole="Store" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_StoreSupplierPrdPermission_Supplier" FromRole="StoreSupplierPrdPermission" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="StoreUnit">
+          <Key>
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="measureUnit" />
+          </Key>
+          <Property Name="ProductId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="measureUnit" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_StoreUnit_Product" FromRole="StoreUnit" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="numOfProd" Type="Int32" />
+          <NavigationProperty Name="StoreSupplierPrdPermissions" Relationship="Self.FK_StoreSupplierPrdPermission_Supplier" FromRole="Supplier" ToRole="StoreSupplierPrdPermission" />
+        </EntityType>
+        <Association Name="FK_StoreSupplierPrdPermission_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="PreoductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreUnit_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="StoreUnit" Type="Self.StoreUnit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="code" />
+            </Principal>
+            <Dependent Role="StoreUnit">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreSupplierPrdPermission_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Store_id" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreSupplierPrdPermission_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="StoreSupplierPrdPermission" Type="Self.StoreSupplierPrdPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreSupplierPrdPermission">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StoreClient">
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <End Role="Store" Type="Self.Store" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SuperMarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Stores" EntityType="Self.Store" />
+          <EntitySet Name="StoreSupplierPrdPermissions" EntityType="Self.StoreSupplierPrdPermission" />
+          <EntitySet Name="StoreUnits" EntityType="Self.StoreUnit" />
+          <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Product" Association="Self.FK_StoreSupplierPrdPermission_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreUnit_Product" Association="Self.FK_StoreUnit_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StoreUnit" EntitySet="StoreUnits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Store" Association="Self.FK_StoreSupplierPrdPermission_Store">
+            <End Role="Store" EntitySet="Stores" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreSupplierPrdPermission_Supplier" Association="Self.FK_StoreSupplierPrdPermission_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="StoreSupplierPrdPermission" EntitySet="StoreSupplierPrdPermissions" />
+          </AssociationSet>
+          <AssociationSet Name="StoreClient" Association="Self.StoreClient">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Store" EntitySet="Stores" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SuperMarketModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SuperMarketModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SuperMarketModelStoreContainer" CdmEntityContainer="SuperMarketEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="SuperMarketModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="website" ColumnName="website" />
+                <ScalarProperty Name="creditCard" ColumnName="creditCard" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="SuperMarketModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="productionDate" ColumnName="productionDate" />
+                <ScalarProperty Name="prdDuration" ColumnName="prdDuration" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stores">
+            <EntityTypeMapping TypeName="SuperMarketModel.Store">
+              <MappingFragment StoreEntitySet="Store">
+                <ScalarProperty Name="Store_id" ColumnName="Store_id" />
+                <ScalarProperty Name="Store_Name" ColumnName="Store_Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="storeMng" ColumnName="storeMng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StoreSupplierPrdPermissions">
+            <EntityTypeMapping TypeName="SuperMarketModel.StoreSupplierPrdPermission">
+              <MappingFragment StoreEntitySet="StoreSupplierPrdPermission">
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="PreoductId" ColumnName="PreoductId" />
+                <ScalarProperty Name="permisionNumImport" ColumnName="permisionNumImport" />
+                <ScalarProperty Name="permissionDate" ColumnName="permissionDate" />
+                <ScalarProperty Name="permissionNumExport" ColumnName="permissionNumExport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StoreUnits">
+            <EntityTypeMapping TypeName="SuperMarketModel.StoreUnit">
+              <MappingFragment StoreEntitySet="StoreUnit">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="measureUnit" ColumnName="measureUnit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="SuperMarketModel.Supplier">
+              <MappingFragment StoreEntitySet="Supplier">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="website" ColumnName="website" />
+                <ScalarProperty Name="numOfProd" ColumnName="numOfProd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="StoreClient" TypeName="SuperMarketModel.StoreClient" StoreEntitySet="StoreClient">
+            <EndProperty Name="Client">
+              <ScalarProperty Name="Id" ColumnName="ClientId" />
+            </EndProperty>
+            <EndProperty Name="Store">
+              <ScalarProperty Name="Store_id" ColumnName="StoreId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SuperMarketModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SuperMarketModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SuperMarketModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SuperMarketModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SuperMarketModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SuperMarketModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SuperMarketModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SuperMarketModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SuperMarketModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
